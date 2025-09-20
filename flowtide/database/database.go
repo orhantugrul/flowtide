@@ -32,15 +32,15 @@ func Connect() error {
 			flowtideDirectory := homeDirectory + "/.flowtide"
 			if _, err := os.Stat(flowtideDirectory); os.IsNotExist(err) {
 				if err := os.MkdirAll(flowtideDirectory, 0755); err != nil {
-					return ".flowtide/flowtide.db"
+					panic("failed to create flowtide directory")
 				}
 			}
 
 			return flowtideDirectory + "/flowtide.db"
 		}(),
 		LogLevel:     logger.Info,
-		MaxIdleConns: 10,
-		MaxOpenConns: 100,
+		MaxIdleConns: 2,
+		MaxOpenConns: 1,
 		MaxLifetime:  time.Hour,
 	}
 
