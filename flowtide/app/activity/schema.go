@@ -25,7 +25,7 @@ type ActivityCreateSchema struct {
 	Language  string    `validate:"required"`
 	FilePath  string    `validate:"required"`
 	StartTime time.Time `validate:"required"`
-	EndTime   time.Time `validate:"required,after=StartTime"`
+	EndTime   time.Time `validate:"required,gtfield=StartTime"`
 }
 
 func (schema *ActivityCreateSchema) ToModel() Activity {
@@ -45,7 +45,7 @@ type ActivityUpdateSchema struct {
 	Language  string    `validate:"required"`
 	FilePath  string    `validate:"required"`
 	StartTime time.Time `validate:"required"`
-	EndTime   time.Time `validate:"required,after=StartTime"`
+	EndTime   time.Time `validate:"required,gtfield=StartTime"`
 }
 
 func (schema *ActivityUpdateSchema) ToModel() Activity {

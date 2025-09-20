@@ -64,7 +64,7 @@ func createEditor(context *fiber.Ctx) error {
 	location := fmt.Sprintf("%s/%d", context.Path(), editor.ID)
 	context.Set("Location", location)
 	context.Status(fiber.StatusCreated)
-	return nil
+	return context.JSON(editor.ToSchema())
 }
 
 func updateEditor(context *fiber.Ctx) error {
@@ -89,8 +89,7 @@ func updateEditor(context *fiber.Ctx) error {
 
 	location := fmt.Sprintf("%s/%d", context.Path(), editor.ID)
 	context.Set("Location", location)
-	context.Status(fiber.StatusOK)
-	return nil
+	return context.JSON(editor.ToSchema())
 }
 
 func deleteEditor(context *fiber.Ctx) error {

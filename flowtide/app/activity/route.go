@@ -64,7 +64,7 @@ func createActivity(context *fiber.Ctx) error {
 	location := fmt.Sprintf("%s/%d", context.Path(), activity.ID)
 	context.Set("Location", location)
 	context.Status(fiber.StatusCreated)
-	return nil
+	return context.JSON(activity.ToSchema())
 }
 
 func updateActivity(context *fiber.Ctx) error {
@@ -89,8 +89,7 @@ func updateActivity(context *fiber.Ctx) error {
 
 	location := fmt.Sprintf("%s/%d", context.Path(), activity.ID)
 	context.Set("Location", location)
-	context.Status(fiber.StatusOK)
-	return nil
+	return context.JSON(activity.ToSchema())
 }
 
 func deleteActivity(context *fiber.Ctx) error {

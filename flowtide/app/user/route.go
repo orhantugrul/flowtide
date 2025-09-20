@@ -85,7 +85,7 @@ func createUser(context *fiber.Ctx) error {
 	location := fmt.Sprintf("%s/%d", context.Path(), user.ID)
 	context.Set("Location", location)
 	context.Status(fiber.StatusCreated)
-	return nil
+	return context.JSON(user.ToSchema())
 }
 
 func updateUser(context *fiber.Ctx) error {
@@ -110,8 +110,7 @@ func updateUser(context *fiber.Ctx) error {
 
 	location := fmt.Sprintf("%s/%d", context.Path(), user.ID)
 	context.Set("Location", location)
-	context.Status(fiber.StatusOK)
-	return nil
+	return context.JSON(user.ToSchema())
 }
 
 func deleteUser(context *fiber.Ctx) error {

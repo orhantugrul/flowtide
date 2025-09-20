@@ -85,7 +85,7 @@ func createProject(context *fiber.Ctx) error {
 	location := fmt.Sprintf("%s/%d", context.Path(), project.ID)
 	context.Set("Location", location)
 	context.Status(fiber.StatusCreated)
-	return nil
+	return context.JSON(project.ToSchema())
 }
 
 func updateProject(context *fiber.Ctx) error {
@@ -110,8 +110,7 @@ func updateProject(context *fiber.Ctx) error {
 
 	location := fmt.Sprintf("%s/%d", context.Path(), project.ID)
 	context.Set("Location", location)
-	context.Status(fiber.StatusOK)
-	return nil
+	return context.JSON(project.ToSchema())
 }
 
 func deleteProject(context *fiber.Ctx) error {
