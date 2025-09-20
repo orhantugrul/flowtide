@@ -1,15 +1,13 @@
 package editor
 
 import (
-	"github.com/orhantugrul/flowtide/app/activity"
 	"gorm.io/gorm"
 )
 
 type Editor struct {
 	gorm.Model
-	Name       string
-	Version    string
-	Activities []activity.Activity
+	Name    string
+	Version string
 }
 
 func (editor *Editor) ToSchema() EditorSchema {

@@ -1,19 +1,14 @@
 package project
 
 import (
-	"os/user"
-
-	"github.com/orhantugrul/flowtide/app/activity"
 	"gorm.io/gorm"
 )
 
 type Project struct {
 	gorm.Model
-	UserID     uint
-	Name       string
-	Path       string
-	User       user.User
-	Activities []activity.Activity
+	UserID uint
+	Name   string
+	Path   string
 }
 
 func (project *Project) ToSchema() ProjectSchema {
