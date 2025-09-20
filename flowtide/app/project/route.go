@@ -8,6 +8,8 @@ import (
 	"github.com/orhantugrul/flowtide/app/activity"
 )
 
+var validate *validator.Validate = validator.New()
+
 func UseRoutes(router fiber.Router) {
 	projects := router.Group("/projects")
 	projects.Get("/", getProjects)
@@ -17,8 +19,6 @@ func UseRoutes(router fiber.Router) {
 	projects.Put("/:id", updateProject)
 	projects.Delete("/:id", deleteProject)
 }
-
-var validate *validator.Validate = validator.New()
 
 func getProjects(context *fiber.Ctx) error {
 	projects, err := GetProjects()
