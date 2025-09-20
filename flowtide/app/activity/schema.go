@@ -28,7 +28,27 @@ type ActivityCreateSchema struct {
 	EndTime   time.Time `validate:"required,after=StartTime"`
 }
 
-func (schema ActivityCreateSchema) ToModel() Activity {
+func (schema *ActivityCreateSchema) ToModel() Activity {
+	return Activity{
+		ProjectID: schema.ProjectID,
+		EditorID:  schema.EditorID,
+		Language:  schema.Language,
+		FilePath:  schema.FilePath,
+		StartTime: schema.StartTime,
+		EndTime:   schema.EndTime,
+	}
+}
+
+type ActivityUpdateSchema struct {
+	ProjectID uint      `validate:"required"`
+	EditorID  uint      `validate:"required"`
+	Language  string    `validate:"required"`
+	FilePath  string    `validate:"required"`
+	StartTime time.Time `validate:"required"`
+	EndTime   time.Time `validate:"required,after=StartTime"`
+}
+
+func (schema *ActivityUpdateSchema) ToModel() Activity {
 	return Activity{
 		ProjectID: schema.ProjectID,
 		EditorID:  schema.EditorID,

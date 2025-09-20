@@ -16,7 +16,7 @@ type Activity struct {
 	EndTime   time.Time
 }
 
-func (activity *Activity) toSchema() ActivitySchema {
+func (activity *Activity) ToSchema() ActivitySchema {
 	return ActivitySchema{
 		ID:        activity.ID,
 		ProjectID: activity.ProjectID,

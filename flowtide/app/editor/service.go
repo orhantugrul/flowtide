@@ -20,12 +20,39 @@ func GetEditor(id int) (Editor, error) {
 
 func CreateEditor(schema *EditorCreateSchema) (*Editor, error) {
 	editor := schema.ToModel()
-	context := context.Background()
 
-	err := gorm.G[Editor](database.Database).Create(context, &editor)
+	err := gorm.G[Editor](database.Database).
+		Create(context.Background(), &editor)
+
 	if err != nil {
 		return nil, err
 	}
 
 	return &editor, nil
+}
+
+func UpdateEditor(id int, schema *EditorUpdateSchema) (*Editor, error) {
+	editor := schema.ToModel()
+
+	_, err := gorm.G[Editor](database.Database).
+		Where("id = ?", id).
+		Updates(context.Background(), editor)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &editor, nil
+}
+
+func DeleteEditor(id int) error {
+	_, err := gorm.G[Editor](database.Database).
+		Where("id = ?", id).
+		Delete(context.Background())
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

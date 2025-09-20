@@ -20,12 +20,39 @@ func GetActivity(id int) (Activity, error) {
 
 func CreateActivity(schema *ActivityCreateSchema) (*Activity, error) {
 	activity := schema.ToModel()
-	context := context.Background()
 
-	err := gorm.G[Activity](database.Database).Create(context, &activity)
+	err := gorm.G[Activity](database.Database).
+		Create(context.Background(), &activity)
+
 	if err != nil {
 		return nil, err
 	}
 
 	return &activity, nil
+}
+
+func UpdateActivity(id int, schema *ActivityUpdateSchema) (*Activity, error) {
+	activity := schema.ToModel()
+
+	_, err := gorm.G[Activity](database.Database).
+		Where("id = ?", id).
+		Updates(context.Background(), activity)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &activity, nil
+}
+
+func DeleteActivity(id int) error {
+	_, err := gorm.G[Activity](database.Database).
+		Where("id = ?", id).
+		Delete(context.Background())
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

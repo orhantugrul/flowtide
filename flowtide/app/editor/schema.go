@@ -26,3 +26,15 @@ func (editor *EditorCreateSchema) ToModel() Editor {
 		Version: editor.Version,
 	}
 }
+
+type EditorUpdateSchema struct {
+	Name    string `validate:"required"`
+	Version string `validate:"required"`
+}
+
+func (editor *EditorUpdateSchema) ToModel() Editor {
+	return Editor{
+		Name:    editor.Name,
+		Version: editor.Version,
+	}
+}
