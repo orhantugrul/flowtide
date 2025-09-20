@@ -124,5 +124,6 @@ func deleteUser(context *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	return context.SendStatus(fiber.StatusNoContent)
+	context.Status(fiber.StatusNoContent)
+	return nil
 }

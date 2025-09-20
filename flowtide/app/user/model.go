@@ -11,7 +11,10 @@ type User struct {
 
 func (user *User) ToSchema() UserSchema {
 	return UserSchema{
-		ID:       user.ID,
-		Username: user.Username,
+		ID:        user.ID,
+		Username:  user.Username,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+		DeletedAt: user.DeletedAt,
 	}
 }

@@ -49,7 +49,7 @@ func getActivity(context *fiber.Ctx) error {
 func createActivity(context *fiber.Ctx) error {
 	schema := ActivityCreateSchema{}
 	if err := context.BodyParser(&schema); err != nil {
-		fiber.NewError(fiber.StatusBadRequest, err.Error())
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
 	if err := validate.Struct(schema); err != nil {

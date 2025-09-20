@@ -26,7 +26,12 @@ func getProjects(context *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	return context.JSON(projects)
+	schemas := []ProjectSchema{}
+	for _, project := range projects {
+		schemas = append(schemas, project.ToSchema())
+	}
+
+	return context.JSON(schemas)
 }
 
 func getProject(context *fiber.Ctx) error {
@@ -119,5 +124,6 @@ func deleteProject(context *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	return context.SendStatus(fiber.StatusNoContent)
+	context.Status(fiber.StatusNoContent)
+	return nil
 }

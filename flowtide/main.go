@@ -11,6 +11,8 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/orhantugrul/flowtide/app/activity"
 	"github.com/orhantugrul/flowtide/app/editor"
+	"github.com/orhantugrul/flowtide/app/project"
+	"github.com/orhantugrul/flowtide/app/user"
 	"github.com/orhantugrul/flowtide/database"
 )
 
@@ -35,9 +37,11 @@ func main() {
 	{
 		activity.UseRoutes(router)
 		editor.UseRoutes(router)
+		project.UseRoutes(router)
+		user.UseRoutes(router)
 	}
 
-	app.Listen(":8080")
+	log.Fatal(app.Listen(":8080"))
 }
 
 func errorHandler(context *fiber.Ctx, err error) error {
