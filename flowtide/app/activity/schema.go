@@ -6,6 +6,10 @@ import (
 	"gorm.io/gorm"
 )
 
+type ActivityParamsSchema struct {
+	ID uint `params:"id"`
+}
+
 type ActivitySchema struct {
 	ID        uint           `json:"id"`
 	ProjectID uint           `json:"project_id"`
@@ -28,17 +32,6 @@ type ActivityCreateSchema struct {
 	EndTime   time.Time `validate:"required,gtfield=StartTime"`
 }
 
-func (schema *ActivityCreateSchema) ToModel() Activity {
-	return Activity{
-		ProjectID: schema.ProjectID,
-		EditorID:  schema.EditorID,
-		Language:  schema.Language,
-		FilePath:  schema.FilePath,
-		StartTime: schema.StartTime,
-		EndTime:   schema.EndTime,
-	}
-}
-
 type ActivityUpdateSchema struct {
 	ProjectID uint      `validate:"required"`
 	EditorID  uint      `validate:"required"`
@@ -46,15 +39,4 @@ type ActivityUpdateSchema struct {
 	FilePath  string    `validate:"required"`
 	StartTime time.Time `validate:"required"`
 	EndTime   time.Time `validate:"required,gtfield=StartTime"`
-}
-
-func (schema *ActivityUpdateSchema) ToModel() Activity {
-	return Activity{
-		ProjectID: schema.ProjectID,
-		EditorID:  schema.EditorID,
-		Language:  schema.Language,
-		FilePath:  schema.FilePath,
-		StartTime: schema.StartTime,
-		EndTime:   schema.EndTime,
-	}
 }

@@ -6,9 +6,12 @@ import (
 	"gorm.io/gorm"
 )
 
+type ProjectParamsSchema struct {
+	ID uint `params:"id"`
+}
+
 type ProjectSchema struct {
 	ID        uint           `json:"id"`
-	UserID    uint           `json:"user_id"`
 	Name      string         `json:"name"`
 	Path      string         `json:"path"`
 	CreatedAt time.Time      `json:"created_at"`
@@ -22,24 +25,8 @@ type ProjectCreateSchema struct {
 	Path   string `validate:"required"`
 }
 
-func (project *ProjectCreateSchema) ToModel() Project {
-	return Project{
-		UserID: project.UserID,
-		Name:   project.Name,
-		Path:   project.Path,
-	}
-}
-
 type ProjectUpdateSchema struct {
 	UserID uint   `validate:"required"`
 	Name   string `validate:"required"`
 	Path   string `validate:"required"`
-}
-
-func (project *ProjectUpdateSchema) ToModel() Project {
-	return Project{
-		UserID: project.UserID,
-		Name:   project.Name,
-		Path:   project.Path,
-	}
 }

@@ -3,11 +3,9 @@ package activity
 import (
 	"fmt"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/orhantugrul/flowtide/validator"
 )
-
-var validate *validator.Validate = validator.New()
 
 func UseRoutes(router fiber.Router) {
 	activities := router.Group("/activities")
@@ -24,39 +22,61 @@ func getActivities(context *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	schemas := []ActivitySchema{}
+	data := []ActivitySchema{}
 	for _, activity := range activities {
-		schemas = append(schemas, activity.ToSchema())
+		data = append(data, ActivitySchema{
+			ID:        activity.ID,
+			ProjectID: activity.ProjectID,
+			EditorID:  activity.EditorID,
+			Language:  activity.Language,
+			FilePath:  activity.FilePath,
+			StartTime: activity.StartTime,
+			EndTime:   activity.EndTime,
+			CreatedAt: activity.CreatedAt,
+			UpdatedAt: activity.UpdatedAt,
+			DeletedAt: activity.DeletedAt,
+		})
 	}
 
-	return context.JSON(schemas)
+	return context.JSON(data)
 }
 
 func getActivity(context *fiber.Ctx) error {
-	id, err := context.ParamsInt("id")
-	if err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "provide a valid id")
+	params := ActivityParamsSchema{}
+	if err := context.ParamsParser(&params); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	activity, err := GetActivity(id)
+	activity, err := GetActivity(params.ID)
 	if err != nil {
 		return fiber.NewError(fiber.StatusNotFound, err.Error())
 	}
 
-	return context.JSON(activity.ToSchema())
+	return context.JSON(ActivitySchema{
+		ID:        activity.ID,
+		ProjectID: activity.ProjectID,
+		EditorID:  activity.EditorID,
+		Language:  activity.Language,
+		FilePath:  activity.FilePath,
+		StartTime: activity.StartTime,
+		EndTime:   activity.EndTime,
+		CreatedAt: activity.CreatedAt,
+		UpdatedAt: activity.UpdatedAt,
+		DeletedAt: activity.DeletedAt,
+	})
 }
 
 func createActivity(context *fiber.Ctx) error {
-	schema := ActivityCreateSchema{}
-	if err := context.BodyParser(&schema); err != nil {
+	body := ActivityCreateSchema{}
+	if err := context.BodyParser(&body); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	if err := validate.Struct(schema); err != nil {
+	if err := validator.Validate(&body); err != nil {
 		return fiber.NewError(fiber.StatusUnprocessableEntity, err.Error())
 	}
 
-	activity, err := CreateActivity(&schema)
+	activity, err := CreateActivity(&body)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
@@ -64,41 +84,63 @@ func createActivity(context *fiber.Ctx) error {
 	location := fmt.Sprintf("%s/%d", context.Path(), activity.ID)
 	context.Set("Location", location)
 	context.Status(fiber.StatusCreated)
-	return context.JSON(activity.ToSchema())
+	return context.JSON(ActivitySchema{
+		ID:        activity.ID,
+		ProjectID: activity.ProjectID,
+		EditorID:  activity.EditorID,
+		Language:  activity.Language,
+		FilePath:  activity.FilePath,
+		StartTime: activity.StartTime,
+		EndTime:   activity.EndTime,
+		CreatedAt: activity.CreatedAt,
+		UpdatedAt: activity.UpdatedAt,
+		DeletedAt: activity.DeletedAt,
+	})
 }
 
 func updateActivity(context *fiber.Ctx) error {
-	id, err := context.ParamsInt("id")
-	if err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "provide a valid id")
-	}
-
-	schema := ActivityUpdateSchema{}
-	if err := context.BodyParser(&schema); err != nil {
+	params := ActivityParamsSchema{}
+	if err := context.ParamsParser(&params); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	if err := validate.Struct(schema); err != nil {
+	body := ActivityUpdateSchema{}
+	if err := context.BodyParser(&body); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+
+	if err := validator.Validate(&body); err != nil {
 		return fiber.NewError(fiber.StatusUnprocessableEntity, err.Error())
 	}
 
-	activity, err := UpdateActivity(id, &schema)
+	activity, err := UpdateActivity(params.ID, &body)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
 	location := fmt.Sprintf("%s/%d", context.Path(), activity.ID)
 	context.Set("Location", location)
-	return context.JSON(activity.ToSchema())
+	return context.JSON(ActivitySchema{
+		ID:        activity.ID,
+		ProjectID: activity.ProjectID,
+		EditorID:  activity.EditorID,
+		Language:  activity.Language,
+		FilePath:  activity.FilePath,
+		StartTime: activity.StartTime,
+		EndTime:   activity.EndTime,
+		CreatedAt: activity.CreatedAt,
+		UpdatedAt: activity.UpdatedAt,
+		DeletedAt: activity.DeletedAt,
+	})
 }
 
 func deleteActivity(context *fiber.Ctx) error {
-	id, err := context.ParamsInt("id")
-	if err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "provide a valid id")
+	params := ActivityParamsSchema{}
+	if err := context.ParamsParser(&params); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	if err := DeleteActivity(id); err != nil {
+	if err := DeleteActivity(params.ID); err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 

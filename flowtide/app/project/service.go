@@ -3,62 +3,63 @@ package project
 import (
 	"context"
 
-	"github.com/orhantugrul/flowtide/app/activity"
 	"github.com/orhantugrul/flowtide/database"
+	"github.com/orhantugrul/flowtide/database/model"
 	"gorm.io/gorm"
 )
 
-func GetProjects() ([]Project, error) {
-	return gorm.G[Project](database.Database).Find(context.Background())
+func GetProjects() ([]model.Project, error) {
+	return gorm.G[model.Project](database.Database).Find(context.Background())
 }
 
-func GetProject(id int) (Project, error) {
-	return gorm.G[Project](database.Database).
+func GetProject(id uint) (model.Project, error) {
+	return gorm.G[model.Project](database.Database).
 		Where("id = ?", id).
 		First(context.Background())
 }
 
-func GetProjectActivities(id int) ([]activity.Activity, error) {
-	return gorm.G[activity.Activity](database.Database).
+func GetProjectActivities(id uint) ([]model.Activity, error) {
+	return gorm.G[model.Activity](database.Database).
 		Where("project_id = ?", id).
 		Find(context.Background())
 }
 
-func CreateProject(schema *ProjectCreateSchema) (*Project, error) {
-	project := schema.ToModel()
+func CreateProject(body *ProjectCreateSchema) (model.Project, error) {
+	project := model.Project{
+		Name: body.Name,
+		Path: body.Path,
+	}
 
-	err := gorm.G[Project](database.Database).
+	err := gorm.G[model.Project](database.Database).
 		Create(context.Background(), &project)
 
 	if err != nil {
-		return nil, err
+		return model.Project{}, err
 	}
 
-	return &project, nil
+	return GetProject(project.ID)
 }
 
-func UpdateProject(id int, schema *ProjectUpdateSchema) (*Project, error) {
-	project := schema.ToModel()
+func UpdateProject(id uint, body *ProjectUpdateSchema) (model.Project, error) {
+	project := model.Project{
+		Name: body.Name,
+		Path: body.Path,
+	}
 
-	_, err := gorm.G[Project](database.Database).
+	_, err := gorm.G[model.Project](database.Database).
 		Where("id = ?", id).
 		Updates(context.Background(), project)
 
 	if err != nil {
-		return nil, err
+		return model.Project{}, err
 	}
 
-	return &project, nil
+	return GetProject(id)
 }
 
-func DeleteProject(id int) error {
-	_, err := gorm.G[Project](database.Database).
+func DeleteProject(id uint) error {
+	_, err := gorm.G[model.Project](database.Database).
 		Where("id = ?", id).
 		Delete(context.Background())
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }

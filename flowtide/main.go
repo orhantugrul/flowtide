@@ -12,7 +12,6 @@ import (
 	"github.com/orhantugrul/flowtide/app/activity"
 	"github.com/orhantugrul/flowtide/app/editor"
 	"github.com/orhantugrul/flowtide/app/project"
-	"github.com/orhantugrul/flowtide/app/user"
 	"github.com/orhantugrul/flowtide/database"
 )
 
@@ -38,7 +37,6 @@ func main() {
 		activity.UseRoutes(router)
 		editor.UseRoutes(router)
 		project.UseRoutes(router)
-		user.UseRoutes(router)
 	}
 
 	log.Fatal(app.Listen(":8080"))

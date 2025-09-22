@@ -26,7 +26,7 @@ func Connect() error {
 		DatabasePath: func() string {
 			homeDirectory, err := os.UserHomeDir()
 			if err != nil {
-				panic("user home directory not found")
+				panic("home directory not found")
 			}
 
 			flowtideDirectory := homeDirectory + "/.flowtide"

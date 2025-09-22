@@ -4,55 +4,62 @@ import (
 	"context"
 
 	"github.com/orhantugrul/flowtide/database"
+	"github.com/orhantugrul/flowtide/database/model"
 	"gorm.io/gorm"
 )
 
-func GetActivities() ([]Activity, error) {
-	return gorm.G[Activity](database.Database).
-		Find(context.Background())
+func GetActivities() ([]model.Activity, error) {
+	return gorm.G[model.Activity](database.Database).Find(context.Background())
 }
 
-func GetActivity(id int) (Activity, error) {
-	return gorm.G[Activity](database.Database).
+func GetActivity(id uint) (model.Activity, error) {
+	return gorm.G[model.Activity](database.Database).
 		Where("id = ?", id).
 		First(context.Background())
 }
 
-func CreateActivity(schema *ActivityCreateSchema) (*Activity, error) {
-	activity := schema.ToModel()
-
-	err := gorm.G[Activity](database.Database).
-		Create(context.Background(), &activity)
-
-	if err != nil {
-		return nil, err
+func CreateActivity(body *ActivityCreateSchema) (model.Activity, error) {
+	activity := model.Activity{
+		ProjectID: body.ProjectID,
+		EditorID:  body.EditorID,
+		Language:  body.Language,
+		FilePath:  body.FilePath,
+		StartTime: body.StartTime,
+		EndTime:   body.EndTime,
 	}
 
-	return &activity, nil
+	err := gorm.G[model.Activity](database.Database).
+		Create(context.Background(), &activity)
+	return activity, err
 }
 
-func UpdateActivity(id int, schema *ActivityUpdateSchema) (*Activity, error) {
-	activity := schema.ToModel()
+func UpdateActivity(
+	id uint,
+	body *ActivityUpdateSchema,
+) (model.Activity, error) {
+	activity := model.Activity{
+		ProjectID: body.ProjectID,
+		EditorID:  body.EditorID,
+		Language:  body.Language,
+		FilePath:  body.FilePath,
+		StartTime: body.StartTime,
+		EndTime:   body.EndTime,
+	}
 
-	_, err := gorm.G[Activity](database.Database).
+	_, err := gorm.G[model.Activity](database.Database).
 		Where("id = ?", id).
 		Updates(context.Background(), activity)
 
 	if err != nil {
-		return nil, err
+		return model.Activity{}, err
 	}
 
-	return &activity, nil
+	return GetActivity(id)
 }
 
-func DeleteActivity(id int) error {
-	_, err := gorm.G[Activity](database.Database).
+func DeleteActivity(id uint) error {
+	_, err := gorm.G[model.Activity](database.Database).
 		Where("id = ?", id).
 		Delete(context.Background())
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }

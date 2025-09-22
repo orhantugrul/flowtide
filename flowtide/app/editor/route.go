@@ -3,11 +3,9 @@ package editor
 import (
 	"fmt"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/orhantugrul/flowtide/validator"
 )
-
-var validate *validator.Validate = validator.New()
 
 func UseRoutes(router fiber.Router) {
 	editors := router.Group("/editors")
@@ -24,39 +22,53 @@ func getEditors(context *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	schemas := []EditorSchema{}
+	data := []EditorSchema{}
 	for _, editor := range editors {
-		schemas = append(schemas, editor.ToSchema())
+		data = append(data, EditorSchema{
+			ID:        editor.ID,
+			Name:      editor.Name,
+			Version:   editor.Version,
+			CreatedAt: editor.CreatedAt,
+			UpdatedAt: editor.UpdatedAt,
+			DeletedAt: editor.DeletedAt,
+		})
 	}
 
-	return context.JSON(schemas)
+	return context.JSON(data)
 }
 
 func getEditor(context *fiber.Ctx) error {
-	id, err := context.ParamsInt("id")
-	if err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "provide a valid id")
+	params := EditorParamsSchema{}
+	if err := context.ParamsParser(&params); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	editor, err := GetEditor(id)
+	editor, err := GetEditor(params.ID)
 	if err != nil {
 		return fiber.NewError(fiber.StatusNotFound, err.Error())
 	}
 
-	return context.JSON(editor.ToSchema())
+	return context.JSON(EditorSchema{
+		ID:        editor.ID,
+		Name:      editor.Name,
+		Version:   editor.Version,
+		CreatedAt: editor.CreatedAt,
+		UpdatedAt: editor.UpdatedAt,
+		DeletedAt: editor.DeletedAt,
+	})
 }
 
 func createEditor(context *fiber.Ctx) error {
-	schema := EditorCreateSchema{}
-	if err := context.BodyParser(&schema); err != nil {
+	body := EditorCreateSchema{}
+	if err := context.BodyParser(&body); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	if err := validate.Struct(schema); err != nil {
+	if err := validator.Validate(&body); err != nil {
 		return fiber.NewError(fiber.StatusUnprocessableEntity, err.Error())
 	}
 
-	editor, err := CreateEditor(&schema)
+	editor, err := CreateEditor(&body)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
@@ -64,41 +76,55 @@ func createEditor(context *fiber.Ctx) error {
 	location := fmt.Sprintf("%s/%d", context.Path(), editor.ID)
 	context.Set("Location", location)
 	context.Status(fiber.StatusCreated)
-	return context.JSON(editor.ToSchema())
+	return context.JSON(EditorSchema{
+		ID:        editor.ID,
+		Name:      editor.Name,
+		Version:   editor.Version,
+		CreatedAt: editor.CreatedAt,
+		UpdatedAt: editor.UpdatedAt,
+		DeletedAt: editor.DeletedAt,
+	})
 }
 
 func updateEditor(context *fiber.Ctx) error {
-	id, err := context.ParamsInt("id")
-	if err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "provide a valid id")
-	}
-
-	schema := EditorUpdateSchema{}
-	if err := context.BodyParser(&schema); err != nil {
+	params := EditorParamsSchema{}
+	if err := context.ParamsParser(&params); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	if err := validate.Struct(schema); err != nil {
+	body := EditorUpdateSchema{}
+	if err := context.BodyParser(&body); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+
+	if err := validator.Validate(&body); err != nil {
 		return fiber.NewError(fiber.StatusUnprocessableEntity, err.Error())
 	}
 
-	editor, err := UpdateEditor(id, &schema)
+	editor, err := UpdateEditor(params.ID, &body)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
 	location := fmt.Sprintf("%s/%d", context.Path(), editor.ID)
 	context.Set("Location", location)
-	return context.JSON(editor.ToSchema())
+	return context.JSON(EditorSchema{
+		ID:        editor.ID,
+		Name:      editor.Name,
+		Version:   editor.Version,
+		CreatedAt: editor.CreatedAt,
+		UpdatedAt: editor.UpdatedAt,
+		DeletedAt: editor.DeletedAt,
+	})
 }
 
 func deleteEditor(context *fiber.Ctx) error {
-	id, err := context.ParamsInt("id")
-	if err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "provide a valid id")
+	params := EditorParamsSchema{}
+	if err := context.ParamsParser(&params); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	if err := DeleteEditor(id); err != nil {
+	if err := DeleteEditor(params.ID); err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
