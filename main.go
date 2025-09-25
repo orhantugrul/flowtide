@@ -9,9 +9,9 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
-	"github.com/orhantugrul/flowtide/app/activity"
-	"github.com/orhantugrul/flowtide/app/editor"
-	"github.com/orhantugrul/flowtide/app/project"
+	"github.com/orhantugrul/flowtide/api/activity"
+	"github.com/orhantugrul/flowtide/api/editor"
+	"github.com/orhantugrul/flowtide/api/project"
 	"github.com/orhantugrul/flowtide/database"
 )
 

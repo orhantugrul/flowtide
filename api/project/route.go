@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/orhantugrul/flowtide/app/activity"
+	"github.com/orhantugrul/flowtide/api/activity"
 	"github.com/orhantugrul/flowtide/validator"
 )
 
