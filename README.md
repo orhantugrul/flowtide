@@ -4,12 +4,12 @@ A lightweight coding activity tracker that monitors your development workflow ac
 
 ## Overview
 
-Flowtide consists of a Go backend API that tracks coding activities and a Svelte-based dashboard for visualizing your development patterns. It captures information about files you work on, programming languages used, and time spent across different projects and editors.
+Flowtide consists of a Go backend API that tracks coding activities and a React dashboard for visualizing your development patterns. It captures information about files you work on, programming languages used, and time spent across different projects and editors.
 
 ## Architecture
 
 - **Backend**: Go with Fiber framework and SQLite database
-- **Frontend**: SvelteKit dashboard with Tailwind CSS
+- **Frontend**: React dashboard with Tailwind CSS
 - **Database**: SQLite with GORM ORM
 
 ## Prerequisites
@@ -22,19 +22,13 @@ Flowtide consists of a Go backend API that tracks coding activities and a Svelte
 
 ### Backend Setup
 
-1. Navigate to the backend directory:
-
-   ```bash
-   cd flowtide
-   ```
-
-2. Install dependencies:
+1. Install dependencies:
 
    ```bash
    go mod download
    ```
 
-3. Run the server:
+2. Run the server:
    ```bash
    go run main.go
    ```
@@ -70,27 +64,6 @@ The backend provides REST API endpoints under `/api`:
 - Editor integration endpoints
 - Project management endpoints
 
-## Development
-
-### Backend Development
-
-```bash
-cd flowtide
-go run main.go
-```
-
-### Frontend Development
-
-```bash
-cd dashboard
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run preview      # Preview production build
-npm run test         # Run tests
-npm run lint         # Lint code
-npm run format       # Format code
-```
-
 ## Database Schema
 
 The application tracks the following entities:
@@ -110,19 +83,3 @@ The application tracks the following entities:
 ## License
 
 MIT License - see [LICENSE.md](LICENSE.md) for details.
-
-## Project Structure
-
-```
-flowtide/
-├── flowtide/           # Go backend
-│   ├── app/           # Application modules
-│   │   ├── activity/  # Activity tracking
-│   │   ├── editor/    # Editor integration
-│   │   ├── project/   # Project management
-│   ├── database/      # Database configuration
-│   └── main.go        # Application entry point
-├── dashboard/         # Svelte frontend
-│   └── src/          # Source code
-└── specs/            # API specifications
-```
