@@ -1,3 +1,4 @@
+import { AppBreadcrumb } from "@/components/app-breadcrumb";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Separator } from "@/components/ui/separator";
@@ -6,8 +7,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import type React from "react";
 import { Suspense } from "react";
 import "./globals.css";
 
@@ -26,37 +29,42 @@ export const metadata: Metadata = {
   description: "Modern, elegant coding activity tracker for developers",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+interface RootLayoutProps {
   children: React.ReactNode;
-}>) {
+}
+
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans ${geistSans} ${geistMono}`}>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <SidebarProvider>
-            <Suspense fallback={"Loading..."}>
-              <AppSidebar />
-              <SidebarInset>
-                <header className="flex h-16 shrink-0 items-center gap-2">
-                  <div className="flex items-center gap-2 px-4">
-                    <SidebarTrigger className="-ml-1" />
-                    <Separator
-                      orientation="vertical"
-                      className="mr-2 data-[orientation=vertical]:h-4"
-                    />
+          <TooltipProvider>
+            <SidebarProvider>
+              <Suspense fallback={"Loading..."}>
+                <AppSidebar />
+                <SidebarInset>
+                  <header className="flex h-14 shrink-0 items-center gap-2">
+                    <div className="flex flex-1 items-center gap-2 px-3">
+                      <SidebarTrigger />
+                      <Separator
+                        orientation="vertical"
+                        className="mr-2 data-[orientation=vertical]:h-4"
+                      />
+                      <AppBreadcrumb />
+                    </div>
+                  </header>
+                  <div className="w-full max-w-5xl p-4 md:p-6 lg:mx-auto">
+                    {children}
                   </div>
-                </header>
-                <main className="flex-1 p-4 md:p-6">{children}</main>
-              </SidebarInset>
-            </Suspense>
-          </SidebarProvider>
+                </SidebarInset>
+              </Suspense>
+            </SidebarProvider>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
