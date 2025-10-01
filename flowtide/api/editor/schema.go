@@ -6,10 +6,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type EditorParamsSchema struct {
-	ID uint `params:"id"`
-}
-
 type EditorSchema struct {
 	ID        uint           `json:"id"`
 	Name      string         `json:"name"`
@@ -17,6 +13,15 @@ type EditorSchema struct {
 	CreatedAt time.Time      `json:"created_at"`
 	UpdatedAt time.Time      `json:"updated_at"`
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
+}
+
+type EditorParamsSchema struct {
+	ID uint `params:"id"`
+}
+
+type EditorQuerySchema struct {
+	Name    string `query:"name"`
+	Version string `query:"version"`
 }
 
 type EditorCreateSchema struct {

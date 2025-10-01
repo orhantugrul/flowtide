@@ -17,7 +17,12 @@ func UseRoutes(router fiber.Router) {
 }
 
 func getEditors(context *fiber.Ctx) error {
-	editors, err := GetEditors()
+	query := EditorQuerySchema{}
+	if err := context.QueryParser(&query); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+
+	editors, err := GetEditors(query)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
