@@ -8,8 +8,10 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetProjects() ([]model.Project, error) {
-	return gorm.G[model.Project](database.Database).Find(context.Background())
+func GetProjects(query *ProjectQueryInput) ([]model.Project, error) {
+	return gorm.G[model.Project](database.Database).
+		Where(&model.Project{Name: query.Name, Path: query.Path}).
+		Find(context.Background())
 }
 
 func GetProject(id uint) (model.Project, error) {
@@ -24,7 +26,7 @@ func GetProjectActivities(id uint) ([]model.Activity, error) {
 		Find(context.Background())
 }
 
-func CreateProject(body *ProjectCreateSchema) (model.Project, error) {
+func CreateProject(body *ProjectCreateInput) (model.Project, error) {
 	project := model.Project{
 		Name: body.Name,
 		Path: body.Path,
@@ -40,7 +42,7 @@ func CreateProject(body *ProjectCreateSchema) (model.Project, error) {
 	return GetProject(project.ID)
 }
 
-func UpdateProject(id uint, body *ProjectUpdateSchema) (model.Project, error) {
+func UpdateProject(id uint, body *ProjectUpdateInput) (model.Project, error) {
 	project := model.Project{
 		Name: body.Name,
 		Path: body.Path,

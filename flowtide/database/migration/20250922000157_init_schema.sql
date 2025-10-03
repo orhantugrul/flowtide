@@ -5,16 +5,18 @@ CREATE TABLE IF NOT EXISTS projects (
     path TEXT NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at DATETIME DEFAULT NULL
+    deleted_at DATETIME DEFAULT NULL,
+    UNIQUE(name, path)
 );
 
 CREATE TABLE IF NOT EXISTS editors (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR(255) NOT NULL UNIQUE,
+    name VARCHAR(255) NOT NULL,
     version VARCHAR(100) NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at DATETIME DEFAULT NULL
+    deleted_at DATETIME DEFAULT NULL,
+    UNIQUE(name, version)
 );
 
 CREATE TABLE IF NOT EXISTS activities (
@@ -32,10 +34,10 @@ CREATE TABLE IF NOT EXISTS activities (
     FOREIGN KEY (editor_id) REFERENCES editors(id) ON DELETE RESTRICT
 );
 
-CREATE INDEX IF NOT EXISTS idx_projects_name ON projects(name);
+CREATE INDEX IF NOT EXISTS idx_projects_name_path ON projects(name, path);
 CREATE INDEX IF NOT EXISTS idx_projects_deleted_at ON projects(deleted_at);
 
-CREATE INDEX IF NOT EXISTS idx_editors_name ON editors(name);
+CREATE INDEX IF NOT EXISTS idx_editors_name_version ON editors(name, version);
 CREATE INDEX IF NOT EXISTS idx_editors_deleted_at ON editors(deleted_at);
 
 CREATE INDEX IF NOT EXISTS idx_activities_project_id ON activities(project_id);
@@ -61,10 +63,10 @@ DROP INDEX IF EXISTS idx_activities_editor_id;
 DROP INDEX IF EXISTS idx_activities_project_id;
 
 DROP INDEX IF EXISTS idx_editors_deleted_at;
-DROP INDEX IF EXISTS idx_editors_name;
+DROP INDEX IF EXISTS idx_editors_name_version;
 
 DROP INDEX IF EXISTS idx_projects_deleted_at;
-DROP INDEX IF EXISTS idx_projects_name;
+DROP INDEX IF EXISTS idx_projects_name_path;
 
 DROP TABLE IF EXISTS activities;
 DROP TABLE IF EXISTS editors;

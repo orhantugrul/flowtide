@@ -19,14 +19,19 @@ func UseRoutes(router fiber.Router) {
 }
 
 func getProjects(context *fiber.Ctx) error {
-	projects, err := GetProjects()
+	query := ProjectQueryInput{}
+	if err := context.QueryParser(&query); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+
+	projects, err := GetProjects(&query)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	data := []ProjectSchema{}
+	data := []ProjectOutput{}
 	for _, item := range projects {
-		data = append(data, ProjectSchema{
+		data = append(data, ProjectOutput{
 			ID:        item.ID,
 			Name:      item.Name,
 			Path:      item.Path,
@@ -40,7 +45,7 @@ func getProjects(context *fiber.Ctx) error {
 }
 
 func getProject(context *fiber.Ctx) error {
-	params := ProjectParamsSchema{}
+	params := ProjectParamsInput{}
 	if err := context.ParamsParser(&params); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
@@ -50,7 +55,7 @@ func getProject(context *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	return context.JSON(ProjectSchema{
+	return context.JSON(ProjectOutput{
 		ID:        project.ID,
 		Name:      project.Name,
 		Path:      project.Path,
@@ -61,7 +66,7 @@ func getProject(context *fiber.Ctx) error {
 }
 
 func getProjectActivities(context *fiber.Ctx) error {
-	params := ProjectParamsSchema{}
+	params := ProjectParamsInput{}
 	if err := context.ParamsParser(&params); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
@@ -71,9 +76,9 @@ func getProjectActivities(context *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	data := []activity.ActivitySchema{}
+	data := []activity.ActivityOutput{}
 	for _, item := range activities {
-		data = append(data, activity.ActivitySchema{
+		data = append(data, activity.ActivityOutput{
 			ID:        item.ID,
 			ProjectID: item.ProjectID,
 			EditorID:  item.EditorID,
@@ -91,7 +96,7 @@ func getProjectActivities(context *fiber.Ctx) error {
 }
 
 func createProject(context *fiber.Ctx) error {
-	body := ProjectCreateSchema{}
+	body := ProjectCreateInput{}
 	if err := context.BodyParser(&body); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
@@ -108,7 +113,7 @@ func createProject(context *fiber.Ctx) error {
 	location := fmt.Sprintf("%s/%d", context.Path(), project.ID)
 	context.Set("Location", location)
 	context.Status(fiber.StatusCreated)
-	return context.JSON(ProjectSchema{
+	return context.JSON(ProjectOutput{
 		ID:        project.ID,
 		Name:      project.Name,
 		Path:      project.Path,
@@ -119,12 +124,12 @@ func createProject(context *fiber.Ctx) error {
 }
 
 func updateProject(context *fiber.Ctx) error {
-	params := ProjectParamsSchema{}
+	params := ProjectParamsInput{}
 	if err := context.ParamsParser(&params); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	body := ProjectUpdateSchema{}
+	body := ProjectUpdateInput{}
 	if err := context.BodyParser(&body); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
@@ -140,7 +145,7 @@ func updateProject(context *fiber.Ctx) error {
 
 	location := fmt.Sprintf("%s/%d", context.Path(), project.ID)
 	context.Set("Location", location)
-	return context.JSON(ProjectSchema{
+	return context.JSON(ProjectOutput{
 		ID:        project.ID,
 		Name:      project.Name,
 		Path:      project.Path,
@@ -151,7 +156,7 @@ func updateProject(context *fiber.Ctx) error {
 }
 
 func deleteProject(context *fiber.Ctx) error {
-	params := ProjectParamsSchema{}
+	params := ProjectParamsInput{}
 	if err := context.ParamsParser(&params); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}

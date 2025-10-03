@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/healthcheck"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/orhantugrul/flowtide/api/activity"
@@ -21,6 +22,10 @@ func main() {
 	app.Use(logger.New())
 	app.Use(recover.New())
 	app.Use(cors.New())
+	app.Use(healthcheck.New(healthcheck.Config{
+		LivenessEndpoint:  "/api/health",
+		ReadinessEndpoint: "/api/ready",
+	}))
 
 	if err := database.Connect(); err != nil {
 		log.Fatal("Failed to connect database: ", err)

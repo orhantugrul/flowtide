@@ -22,9 +22,9 @@ func getActivities(context *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	data := []ActivitySchema{}
+	data := []ActivityOutput{}
 	for _, activity := range activities {
-		data = append(data, ActivitySchema{
+		data = append(data, ActivityOutput{
 			ID:        activity.ID,
 			ProjectID: activity.ProjectID,
 			EditorID:  activity.EditorID,
@@ -42,7 +42,7 @@ func getActivities(context *fiber.Ctx) error {
 }
 
 func getActivity(context *fiber.Ctx) error {
-	params := ActivityParamsSchema{}
+	params := ActivityParamsInput{}
 	if err := context.ParamsParser(&params); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
@@ -52,7 +52,7 @@ func getActivity(context *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusNotFound, err.Error())
 	}
 
-	return context.JSON(ActivitySchema{
+	return context.JSON(ActivityOutput{
 		ID:        activity.ID,
 		ProjectID: activity.ProjectID,
 		EditorID:  activity.EditorID,
@@ -67,7 +67,7 @@ func getActivity(context *fiber.Ctx) error {
 }
 
 func createActivity(context *fiber.Ctx) error {
-	body := ActivityCreateSchema{}
+	body := ActivityCreateInput{}
 	if err := context.BodyParser(&body); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
@@ -84,7 +84,7 @@ func createActivity(context *fiber.Ctx) error {
 	location := fmt.Sprintf("%s/%d", context.Path(), activity.ID)
 	context.Set("Location", location)
 	context.Status(fiber.StatusCreated)
-	return context.JSON(ActivitySchema{
+	return context.JSON(ActivityOutput{
 		ID:        activity.ID,
 		ProjectID: activity.ProjectID,
 		EditorID:  activity.EditorID,
@@ -99,12 +99,12 @@ func createActivity(context *fiber.Ctx) error {
 }
 
 func updateActivity(context *fiber.Ctx) error {
-	params := ActivityParamsSchema{}
+	params := ActivityParamsInput{}
 	if err := context.ParamsParser(&params); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	body := ActivityUpdateSchema{}
+	body := ActivityUpdateInput{}
 	if err := context.BodyParser(&body); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
@@ -120,7 +120,7 @@ func updateActivity(context *fiber.Ctx) error {
 
 	location := fmt.Sprintf("%s/%d", context.Path(), activity.ID)
 	context.Set("Location", location)
-	return context.JSON(ActivitySchema{
+	return context.JSON(ActivityOutput{
 		ID:        activity.ID,
 		ProjectID: activity.ProjectID,
 		EditorID:  activity.EditorID,
@@ -135,7 +135,7 @@ func updateActivity(context *fiber.Ctx) error {
 }
 
 func deleteActivity(context *fiber.Ctx) error {
-	params := ActivityParamsSchema{}
+	params := ActivityParamsInput{}
 	if err := context.ParamsParser(&params); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}

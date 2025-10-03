@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetEditors(query EditorQuerySchema) ([]model.Editor, error) {
+func GetEditors(query *EditorQueryInput) ([]model.Editor, error) {
 	return gorm.G[model.Editor](database.Database).
 		Where(&model.Editor{Name: query.Name, Version: query.Version}).
 		Find(context.Background())
@@ -21,7 +21,7 @@ func GetEditor(id uint) (model.Editor, error) {
 		First(context.Background())
 }
 
-func CreateEditor(body *EditorCreateSchema) (model.Editor, error) {
+func CreateEditor(body *EditorCreateInput) (model.Editor, error) {
 	editor := model.Editor{
 		Name:    body.Name,
 		Version: body.Version,
@@ -32,7 +32,7 @@ func CreateEditor(body *EditorCreateSchema) (model.Editor, error) {
 	return editor, err
 }
 
-func UpdateEditor(id uint, body *EditorUpdateSchema) (model.Editor, error) {
+func UpdateEditor(id uint, body *EditorUpdateInput) (model.Editor, error) {
 	editor := model.Editor{
 		Name:    body.Name,
 		Version: body.Version,

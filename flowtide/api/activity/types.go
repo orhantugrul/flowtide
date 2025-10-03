@@ -6,11 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type ActivityParamsSchema struct {
-	ID uint `params:"id"`
-}
-
-type ActivitySchema struct {
+type ActivityOutput struct {
 	ID        uint           `json:"id"`
 	ProjectID uint           `json:"project_id"`
 	EditorID  uint           `json:"editor_id"`
@@ -23,7 +19,11 @@ type ActivitySchema struct {
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
 }
 
-type ActivityCreateSchema struct {
+type ActivityParamsInput struct {
+	ID uint `params:"id"`
+}
+
+type ActivityCreateInput struct {
 	ProjectID uint      `validate:"required"`
 	EditorID  uint      `validate:"required"`
 	Language  string    `validate:"required"`
@@ -32,7 +32,7 @@ type ActivityCreateSchema struct {
 	EndTime   time.Time `validate:"required,gtfield=StartTime"`
 }
 
-type ActivityUpdateSchema struct {
+type ActivityUpdateInput struct {
 	ProjectID uint      `validate:"required"`
 	EditorID  uint      `validate:"required"`
 	Language  string    `validate:"required"`

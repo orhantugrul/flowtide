@@ -17,19 +17,19 @@ func UseRoutes(router fiber.Router) {
 }
 
 func getEditors(context *fiber.Ctx) error {
-	query := EditorQuerySchema{}
+	query := EditorQueryInput{}
 	if err := context.QueryParser(&query); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	editors, err := GetEditors(query)
+	editors, err := GetEditors(&query)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	data := []EditorSchema{}
+	data := []EditorOutput{}
 	for _, editor := range editors {
-		data = append(data, EditorSchema{
+		data = append(data, EditorOutput{
 			ID:        editor.ID,
 			Name:      editor.Name,
 			Version:   editor.Version,
@@ -43,7 +43,7 @@ func getEditors(context *fiber.Ctx) error {
 }
 
 func getEditor(context *fiber.Ctx) error {
-	params := EditorParamsSchema{}
+	params := EditorParamsInput{}
 	if err := context.ParamsParser(&params); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
@@ -53,7 +53,7 @@ func getEditor(context *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusNotFound, err.Error())
 	}
 
-	return context.JSON(EditorSchema{
+	return context.JSON(EditorOutput{
 		ID:        editor.ID,
 		Name:      editor.Name,
 		Version:   editor.Version,
@@ -64,7 +64,7 @@ func getEditor(context *fiber.Ctx) error {
 }
 
 func createEditor(context *fiber.Ctx) error {
-	body := EditorCreateSchema{}
+	body := EditorCreateInput{}
 	if err := context.BodyParser(&body); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
@@ -81,7 +81,7 @@ func createEditor(context *fiber.Ctx) error {
 	location := fmt.Sprintf("%s/%d", context.Path(), editor.ID)
 	context.Set("Location", location)
 	context.Status(fiber.StatusCreated)
-	return context.JSON(EditorSchema{
+	return context.JSON(EditorOutput{
 		ID:        editor.ID,
 		Name:      editor.Name,
 		Version:   editor.Version,
@@ -92,12 +92,12 @@ func createEditor(context *fiber.Ctx) error {
 }
 
 func updateEditor(context *fiber.Ctx) error {
-	params := EditorParamsSchema{}
+	params := EditorParamsInput{}
 	if err := context.ParamsParser(&params); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	body := EditorUpdateSchema{}
+	body := EditorUpdateInput{}
 	if err := context.BodyParser(&body); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
@@ -113,7 +113,7 @@ func updateEditor(context *fiber.Ctx) error {
 
 	location := fmt.Sprintf("%s/%d", context.Path(), editor.ID)
 	context.Set("Location", location)
-	return context.JSON(EditorSchema{
+	return context.JSON(EditorOutput{
 		ID:        editor.ID,
 		Name:      editor.Name,
 		Version:   editor.Version,
@@ -124,7 +124,7 @@ func updateEditor(context *fiber.Ctx) error {
 }
 
 func deleteEditor(context *fiber.Ctx) error {
-	params := EditorParamsSchema{}
+	params := EditorParamsInput{}
 	if err := context.ParamsParser(&params); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}

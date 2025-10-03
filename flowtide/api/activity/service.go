@@ -18,7 +18,7 @@ func GetActivity(id uint) (model.Activity, error) {
 		First(context.Background())
 }
 
-func CreateActivity(body *ActivityCreateSchema) (model.Activity, error) {
+func CreateActivity(body *ActivityCreateInput) (model.Activity, error) {
 	activity := model.Activity{
 		ProjectID: body.ProjectID,
 		EditorID:  body.EditorID,
@@ -35,7 +35,7 @@ func CreateActivity(body *ActivityCreateSchema) (model.Activity, error) {
 
 func UpdateActivity(
 	id uint,
-	body *ActivityUpdateSchema,
+	body *ActivityUpdateInput,
 ) (model.Activity, error) {
 	activity := model.Activity{
 		ProjectID: body.ProjectID,
