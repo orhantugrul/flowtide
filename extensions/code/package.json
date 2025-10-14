@@ -69,12 +69,6 @@
         "title": "Open Dashboard",
         "category": "Flowtide",
         "icon": "$(graph)"
-      },
-      {
-        "command": "flowtide.logs",
-        "title": "Show Logs",
-        "category": "Flowtide",
-        "icon": "$(output)"
       }
     ],
     "menus": {
@@ -88,13 +82,7 @@
           "when": "flowtide.tracking"
         },
         {
-          "command": "flowtide.toggle"
-        },
-        {
           "command": "flowtide.dashboard"
-        },
-        {
-          "command": "flowtide.logs"
         }
       ]
     },
@@ -106,31 +94,10 @@
           "default": "http://localhost:8080",
           "description": "Flowtide dashboard url"
         },
-        "flowtide.enabled": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable activity tracking"
-        },
         "flowtide.autoStart": {
           "type": "boolean",
           "default": true,
           "markdownDescription": "Automatically start tracking when VSCode opens"
-        },
-        "flowtide.logLevel": {
-          "type": "string",
-          "enum": [
-            "debug",
-            "info",
-            "warn",
-            "error"
-          ],
-          "default": "info",
-          "description": "Logging level for the extension"
-        },
-        "flowtide.showNotifications": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show notifications for tracking events"
         }
       }
     }

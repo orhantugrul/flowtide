@@ -2,11 +2,10 @@ import * as vscode from "vscode";
 
 export interface Config {
   url: string;
-  enabled: boolean;
   autoStart: boolean;
 }
 
-export class Configuration {
+export class Configuration implements vscode.Disposable {
   private static instance: Configuration;
   private configChangeListener: vscode.Disposable | undefined = undefined;
 
@@ -26,7 +25,6 @@ export class Configuration {
 
     return {
       url: config.get<string>("url", "http://localhost:8080"),
-      enabled: config.get<boolean>("enabled", true),
       autoStart: config.get<boolean>("autoStart", true),
     };
   }
@@ -93,7 +91,7 @@ export class Configuration {
     vscode.commands.executeCommand("flowtide.revalidateConfiguration");
   }
 
-  public dispose(): void {
+  dispose() {
     this.configChangeListener?.dispose();
   }
 }
