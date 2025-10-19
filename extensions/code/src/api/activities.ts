@@ -1,5 +1,5 @@
-import { Activity, ActivityCreateInput } from "src/types/activity";
-import { fetcher, FetchResult } from "src/utils/fetcher";
+import { Activity, ActivityCreateInput } from "../types/activity";
+import { fetcher, FetchResult } from "../utils/fetcher";
 
 export async function getActivities(): Promise<FetchResult<Activity[]>> {
   return await fetcher<Activity[]>("/api/activities");

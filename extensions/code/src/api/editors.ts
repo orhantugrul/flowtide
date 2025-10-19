@@ -1,5 +1,5 @@
-import { Editor, EditorCreateInput, EditorQueryInput } from "src/types/editor";
-import { fetcher, FetchResult } from "src/utils/fetcher";
+import { Editor, EditorCreateInput, EditorQueryInput } from "../types/editor";
+import { fetcher, FetchResult } from "../utils/fetcher";
 
 export async function getEditors(
   query: EditorQueryInput

@@ -2,8 +2,8 @@ import {
   Project,
   ProjectCreateInput,
   ProjectQueryInput,
-} from "src/types/project";
-import { fetcher, FetchResult } from "src/utils/fetcher";
+} from "../types/project";
+import { fetcher, FetchResult } from "../utils/fetcher";
 
 export async function getProjects(
   query: ProjectQueryInput
