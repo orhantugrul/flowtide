@@ -12,6 +12,7 @@ func UseRoutes(router fiber.Router) {
 	activities.Get("/", getActivities)
 	activities.Get("/:id", getActivity)
 	activities.Post("/", createActivity)
+	activities.Post("/batch", createActivities)
 	activities.Put("/:id", updateActivity)
 	activities.Delete("/:id", deleteActivity)
 }
@@ -96,6 +97,26 @@ func createActivity(context *fiber.Ctx) error {
 		UpdatedAt: activity.UpdatedAt,
 		DeletedAt: activity.DeletedAt,
 	})
+}
+
+func createActivities(context *fiber.Ctx) error {
+	body := []ActivityCreateInput{}
+	if err := context.BodyParser(&body); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+
+	for _, item := range body {
+		if err := validator.Validate(&item); err != nil {
+			return fiber.NewError(fiber.StatusUnprocessableEntity, err.Error())
+		}
+	}
+
+	activities, err := CreateActivities(&body)
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+	}
+
+	return context.JSON(activities)
 }
 
 func updateActivity(context *fiber.Ctx) error {

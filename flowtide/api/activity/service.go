@@ -33,6 +33,24 @@ func CreateActivity(body *ActivityCreateInput) (model.Activity, error) {
 	return activity, err
 }
 
+func CreateActivities(body *[]ActivityCreateInput) ([]model.Activity, error) {
+	activities := []model.Activity{}
+	for _, item := range *body {
+		activities = append(activities, model.Activity{
+			ProjectID: item.ProjectID,
+			EditorID:  item.EditorID,
+			Language:  item.Language,
+			FilePath:  item.FilePath,
+			StartTime: item.StartTime,
+			EndTime:   item.EndTime,
+		})
+	}
+
+	err := gorm.G[[]model.Activity](database.Database).
+		Create(context.Background(), &activities)
+	return activities, err
+}
+
 func UpdateActivity(
 	id uint,
 	body *ActivityUpdateInput,

@@ -29,7 +29,7 @@ type ActivityCreateInput struct {
 	Language  string    `validate:"required"`
 	FilePath  string    `validate:"required"`
 	StartTime time.Time `validate:"required"`
-	EndTime   time.Time `validate:"required,gtfield=StartTime"`
+	EndTime   time.Time `validate:"required,gtefield=StartTime"`
 }
 
 type ActivityUpdateInput struct {
