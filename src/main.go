@@ -10,10 +10,10 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/healthcheck"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
-	"github.com/orhantugrul/flowtide/api/activity"
-	"github.com/orhantugrul/flowtide/api/editor"
-	"github.com/orhantugrul/flowtide/api/project"
-	"github.com/orhantugrul/flowtide/database"
+	"github.com/orhantugrul/flowtide/src/api/activity"
+	"github.com/orhantugrul/flowtide/src/api/editor"
+	"github.com/orhantugrul/flowtide/src/api/project"
+	"github.com/orhantugrul/flowtide/src/database"
 )
 
 func main() {

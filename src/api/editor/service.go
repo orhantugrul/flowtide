@@ -3,8 +3,8 @@ package editor
 import (
 	"context"
 
-	"github.com/orhantugrul/flowtide/database"
-	"github.com/orhantugrul/flowtide/database/model"
+	"github.com/orhantugrul/flowtide/src/database"
+	"github.com/orhantugrul/flowtide/src/database/model"
 	"gorm.io/gorm"
 )
 

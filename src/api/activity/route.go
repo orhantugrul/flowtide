@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/orhantugrul/flowtide/validator"
+	"github.com/orhantugrul/flowtide/src/validator"
 )
 
 func UseRoutes(router fiber.Router) {
