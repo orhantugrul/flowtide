@@ -1,14 +1,14 @@
 export interface Activity {
-  id?: number;
+  id: number;
   projectId: number;
   editorId: number;
   language: string;
   filePath: string;
-  startTime: Date;
-  endTime: Date;
-  createdAt?: Date;
-  updatedAt?: Date;
-  deletedAt?: Date;
+  startTime: string;
+  endTime: string;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string;
 }
 
 export interface ActivityCreateInput {
@@ -16,6 +16,6 @@ export interface ActivityCreateInput {
   editorId: number;
   language: string;
   filePath: string;
-  startTime: Date;
-  endTime: Date;
+  startTime: string;
+  endTime: string;
 }

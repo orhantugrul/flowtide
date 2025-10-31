@@ -1,10 +1,10 @@
 export interface Editor {
-  id?: number;
+  id: number;
   name: string;
   version: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  deletedAt?: Date;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string;
 }
 
 export interface EditorQueryInput {
