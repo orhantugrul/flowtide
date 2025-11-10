@@ -1,18 +1,24 @@
 import * as vscode from "vscode";
 
-export interface FetchResult<T> {
+export type FetchResult<T> = {
   data?: T;
   error?: FetchError;
-}
+};
 
-export interface FetchError {
+export type FetchError = {
   code: string;
   message: string;
-}
+};
 
+/**
+ * Fetcher utility to make HTTP requests to the Flowtide backend
+ * @param path The API endpoint path
+ * @param init Optional fetch initialization options
+ * @returns A promise that resolves to the fetch result
+ */
 export async function fetcher<T>(
   path: string,
-  init?: RequestInit
+  init?: RequestInit,
 ): Promise<FetchResult<T>> {
   const url = vscode.workspace.getConfiguration("flowtide").get<string>("url");
 
