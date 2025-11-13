@@ -1,12 +1,12 @@
-import { Activity, ActivityCreateInput } from "../types/activity";
-import { fetcher, FetchResult } from "../utils/fetcher";
+import type { Activity, ActivityCreateInput } from "../types/activity";
+import { type FetchResult, fetcher } from "../utils/fetcher";
 
 export async function getActivities(): Promise<FetchResult<Activity[]>> {
   return await fetcher<Activity[]>("/api/activities");
 }
 
 export async function createActivity(
-  body: ActivityCreateInput
+  body: ActivityCreateInput,
 ): Promise<FetchResult<Activity>> {
   return await fetcher<Activity>("/api/activities", {
     method: "POST",
@@ -15,7 +15,7 @@ export async function createActivity(
 }
 
 export async function createActivities(
-  body: ActivityCreateInput[]
+  body: ActivityCreateInput[],
 ): Promise<FetchResult<Activity[]>> {
   return await fetcher<Activity[]>("/api/activities/batch", {
     method: "POST",

@@ -1,15 +1,19 @@
-import { Editor, EditorCreateInput, EditorQueryInput } from "../types/editor";
-import { fetcher, FetchResult } from "../utils/fetcher";
+import type {
+  Editor,
+  EditorCreateInput,
+  EditorQueryInput,
+} from "../types/editor";
+import { type FetchResult, fetcher } from "../utils/fetcher";
 
 export async function getEditors(
-  query: EditorQueryInput
+  query: EditorQueryInput,
 ): Promise<FetchResult<Editor[]>> {
   const params = new URLSearchParams(Object.entries(query)).toString();
   return await fetcher<Editor[]>(`/api/editors?${params}`);
 }
 
 export async function createEditor(
-  body: EditorCreateInput
+  body: EditorCreateInput,
 ): Promise<FetchResult<Editor>> {
   return await fetcher<Editor>(`/api/editors`, {
     method: "POST",
