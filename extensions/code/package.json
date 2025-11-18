@@ -1,0 +1,125 @@
+{
+  "name": "flowtide",
+  "displayName": "Flowtide",
+  "description": "Lightweight coding activity tracker",
+  "version": "0.0.1",
+  "author": {
+    "name": "orhantugrul",
+    "email": "orhantugrulsahin@gmail.com"
+  },
+  "publisher": "flowtide",
+  "license": "MIT",
+  "homepage": "https://github.com/orhantugrul/flowtide",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orhantugrul/flowtide"
+  },
+  "bugs": {
+    "url": "https://github.com/orhantugrul/flowtide/issues"
+  },
+  "keywords": [
+    "productivity",
+    "activity",
+    "tracker",
+    "metrics",
+    "analytics",
+    "time",
+    "coding",
+    "flow"
+  ],
+  "engines": {
+    "vscode": "^1.99.0",
+    "node": ">=22.0.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "flowtide.start",
+        "title": "Start Activity Tracking",
+        "category": "Flowtide",
+        "icon": "$(play)"
+      },
+      {
+        "command": "flowtide.stop",
+        "title": "Stop Activity Tracking",
+        "category": "Flowtide",
+        "icon": "$(stop)"
+      },
+      {
+        "command": "flowtide.toggle",
+        "title": "Toggle Activity Tracking",
+        "category": "Flowtide",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "flowtide.dashboard",
+        "title": "Open Dashboard",
+        "category": "Flowtide",
+        "icon": "$(graph)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "flowtide.start",
+          "when": "!flowtide.tracking"
+        },
+        {
+          "command": "flowtide.stop",
+          "when": "flowtide.tracking"
+        },
+        {
+          "command": "flowtide.dashboard"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Flowtide",
+      "properties": {
+        "flowtide.url": {
+          "type": "string",
+          "default": "http://localhost:8080",
+          "description": "Flowtide dashboard url"
+        },
+        "flowtide.autoStart": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Automatically start tracking when VSCode opens"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@biomejs/biome": "2.3.4",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "@types/vscode": "^1.104.0",
+    "@typescript-eslint/eslint-plugin": "^8.42.0",
+    "@typescript-eslint/parser": "^8.42.0",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.34.0",
+    "typescript": "^5.9.2"
+  }
+}
