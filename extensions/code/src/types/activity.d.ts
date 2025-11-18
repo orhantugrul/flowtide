@@ -1,5 +1,5 @@
-export interface Activity {
-  id: number;
+export type Activity = {
+  id?: number;
   projectId: number;
   editorId: number;
   language: string;
@@ -9,13 +9,13 @@ export interface Activity {
   createdAt?: string;
   updatedAt?: string;
   deletedAt?: string;
-}
+};
 
-export interface ActivityCreateInput {
+export type ActivityCreateInput = {
   projectId: number;
   editorId: number;
   language: string;
   filePath: string;
   startTime: string;
   endTime: string;
-}
+};

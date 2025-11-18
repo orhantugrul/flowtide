@@ -1,18 +1,18 @@
-export interface Project {
+export type Project = {
   id: number;
   name: string;
   path: string;
   createdAt?: string;
   updatedAt?: string;
   deletedAt?: string;
-}
+};
 
-export interface ProjectQueryInput {
+export type ProjectQueryInput = {
   name?: string;
   path?: string;
-}
+};
 
-export interface ProjectCreateInput {
+export type ProjectCreateInput = {
   name: string;
   path: string;
-}
+};
