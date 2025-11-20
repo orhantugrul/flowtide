@@ -18,7 +18,12 @@ func UseRoutes(router fiber.Router) {
 }
 
 func getActivities(context *fiber.Ctx) error {
-	activities, err := GetActivities()
+	query := ActivityQueryInput{}
+	if err := context.QueryParser(&query); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+
+	activities, err := GetActivities(&query)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
@@ -31,8 +36,8 @@ func getActivities(context *fiber.Ctx) error {
 			EditorID:  activity.EditorID,
 			Language:  activity.Language,
 			FilePath:  activity.FilePath,
-			StartTime: activity.StartTime,
-			EndTime:   activity.EndTime,
+			StartedAt: activity.StartedAt,
+			EndedAt:   activity.EndedAt,
 			CreatedAt: activity.CreatedAt,
 			UpdatedAt: activity.UpdatedAt,
 			DeletedAt: activity.DeletedAt,
@@ -59,8 +64,8 @@ func getActivity(context *fiber.Ctx) error {
 		EditorID:  activity.EditorID,
 		Language:  activity.Language,
 		FilePath:  activity.FilePath,
-		StartTime: activity.StartTime,
-		EndTime:   activity.EndTime,
+		StartedAt: activity.StartedAt,
+		EndedAt:   activity.EndedAt,
 		CreatedAt: activity.CreatedAt,
 		UpdatedAt: activity.UpdatedAt,
 		DeletedAt: activity.DeletedAt,
@@ -91,8 +96,8 @@ func createActivity(context *fiber.Ctx) error {
 		EditorID:  activity.EditorID,
 		Language:  activity.Language,
 		FilePath:  activity.FilePath,
-		StartTime: activity.StartTime,
-		EndTime:   activity.EndTime,
+		StartedAt: activity.StartedAt,
+		EndedAt:   activity.EndedAt,
 		CreatedAt: activity.CreatedAt,
 		UpdatedAt: activity.UpdatedAt,
 		DeletedAt: activity.DeletedAt,
@@ -147,8 +152,8 @@ func updateActivity(context *fiber.Ctx) error {
 		EditorID:  activity.EditorID,
 		Language:  activity.Language,
 		FilePath:  activity.FilePath,
-		StartTime: activity.StartTime,
-		EndTime:   activity.EndTime,
+		StartedAt: activity.StartedAt,
+		EndedAt:   activity.EndedAt,
 		CreatedAt: activity.CreatedAt,
 		UpdatedAt: activity.UpdatedAt,
 		DeletedAt: activity.DeletedAt,

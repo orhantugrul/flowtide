@@ -12,8 +12,8 @@ type Activity struct {
 	EditorID  uint      `gorm:"not null;index"`
 	Language  string    `gorm:"size:100;not null;index"`
 	FilePath  string    `gorm:"type:text;not null"`
-	StartTime time.Time `gorm:"not null;index"`
-	EndTime   time.Time `gorm:"not null;index"`
+	StartedAt time.Time `gorm:"not null;index"`
+	EndedAt   time.Time `gorm:"not null;index"`
 	Project   Project   `gorm:"constraint:OnDelete:CASCADE;"`
 	Editor    Editor    `gorm:"constraint:OnDelete:RESTRICT;"`
 }
