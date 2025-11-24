@@ -1,61 +1,26 @@
 package database
 
 import (
+	"context"
+	"database/sql"
 	"fmt"
-	"log"
-	"os"
+	"path/filepath"
 	"time"
 
+	"github.com/pressly/goose/v3"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 var Database *gorm.DB
 
-type Config struct {
-	DatabasePath string
-	LogLevel     logger.LogLevel
-	MaxIdleConns int
-	MaxOpenConns int
-	MaxLifetime  time.Duration
-}
-
 func Connect() error {
-	config := Config{
-		DatabasePath: func() string {
-			homeDirectory, err := os.UserHomeDir()
-			if err != nil {
-				panic("home directory not found")
-			}
-
-			flowtideDirectory := homeDirectory + "/.flowtide"
-			if _, err := os.Stat(flowtideDirectory); os.IsNotExist(err) {
-				if err := os.MkdirAll(flowtideDirectory, 0755); err != nil {
-					panic("failed to create flowtide directory")
-				}
-			}
-
-			return flowtideDirectory + "/flowtide.db"
-		}(),
-		LogLevel:     logger.Info,
-		MaxIdleConns: 2,
-		MaxOpenConns: 1,
-		MaxLifetime:  time.Hour,
+	config, err := NewConfig()
+	if err != nil {
+		return fmt.Errorf("failed to configurate the database: %w", err)
 	}
 
-	gormLogger := logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags),
-		logger.Config{
-			SlowThreshold:             time.Second,
-			LogLevel:                  config.LogLevel,
-			IgnoreRecordNotFoundError: true,
-			Colorful:                  true,
-		},
-	)
-
-	database, err := gorm.Open(sqlite.Open(config.DatabasePath), &gorm.Config{
-		Logger: gormLogger,
+	database, err := gorm.Open(sqlite.Open(config.Path), &gorm.Config{
 		NowFunc: func() time.Time {
 			return time.Now().UTC()
 		},
@@ -77,8 +42,21 @@ func Connect() error {
 		return fmt.Errorf("failed to ping database: %w", err)
 	}
 
+	if err := migrate(sqlDatabase); err != nil {
+		return fmt.Errorf("failed to run migrations: %w", err)
+	}
+
 	Database = database
 	return nil
+}
+
+func migrate(database *sql.DB) error {
+	if err := goose.SetDialect("sqlite3"); err != nil {
+		return fmt.Errorf("failed to set goose dialect: %w", err)
+	}
+
+	migrations := filepath.Join("src", "database", "migration")
+	return goose.RunContext(context.Background(), "up", database, migrations)
 }
 
 func Close() error {
@@ -96,29 +74,4 @@ func Close() error {
 	}
 
 	return nil
-}
-
-func GetDB() *gorm.DB {
-	return Database
-}
-
-func IsConnected() bool {
-	if Database == nil {
-		return false
-	}
-
-	sqlDB, err := Database.DB()
-	if err != nil {
-		return false
-	}
-
-	return sqlDB.Ping() == nil
-}
-
-func Transaction(fn func(*gorm.DB) error) error {
-	if Database == nil {
-		return fmt.Errorf("database connection not initialized")
-	}
-
-	return Database.Transaction(fn)
 }

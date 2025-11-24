@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS activities (
     editor_id INTEGER NOT NULL,
     language VARCHAR(100) NOT NULL,
     file_path TEXT NOT NULL,
-    start_time DATETIME NOT NULL,
-    end_time DATETIME NOT NULL,
+    started_at DATETIME NOT NULL,
+    ended_at DATETIME NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted_at DATETIME DEFAULT NULL,
@@ -43,12 +43,12 @@ CREATE INDEX IF NOT EXISTS idx_editors_deleted_at ON editors(deleted_at);
 CREATE INDEX IF NOT EXISTS idx_activities_project_id ON activities(project_id);
 CREATE INDEX IF NOT EXISTS idx_activities_editor_id ON activities(editor_id);
 CREATE INDEX IF NOT EXISTS idx_activities_language ON activities(language);
-CREATE INDEX IF NOT EXISTS idx_activities_start_time ON activities(start_time);
-CREATE INDEX IF NOT EXISTS idx_activities_end_time ON activities(end_time);
+CREATE INDEX IF NOT EXISTS idx_activities_started_at ON activities(started_at);
+CREATE INDEX IF NOT EXISTS idx_activities_ended_at ON activities(ended_at);
 CREATE INDEX IF NOT EXISTS idx_activities_deleted_at ON activities(deleted_at);
 
-CREATE INDEX IF NOT EXISTS idx_activities_project_time ON activities(project_id, start_time, end_time);
-CREATE INDEX IF NOT EXISTS idx_activities_editor_time ON activities(editor_id, start_time, end_time);
+CREATE INDEX IF NOT EXISTS idx_activities_project_time ON activities(project_id, started_at, ended_at);
+CREATE INDEX IF NOT EXISTS idx_activities_editor_time ON activities(editor_id, started_at, ended_at);
 
 
 -- +goose Down
@@ -56,8 +56,8 @@ DROP INDEX IF EXISTS idx_activities_editor_time;
 DROP INDEX IF EXISTS idx_activities_project_time;
 
 DROP INDEX IF EXISTS idx_activities_deleted_at;
-DROP INDEX IF EXISTS idx_activities_end_time;
-DROP INDEX IF EXISTS idx_activities_start_time;
+DROP INDEX IF EXISTS idx_activities_ended_at;
+DROP INDEX IF EXISTS idx_activities_started_at;
 DROP INDEX IF EXISTS idx_activities_language;
 DROP INDEX IF EXISTS idx_activities_editor_id;
 DROP INDEX IF EXISTS idx_activities_project_id;
