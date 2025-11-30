@@ -13,6 +13,7 @@ import (
 	"github.com/orhantugrul/flowtide/src/api/activity"
 	"github.com/orhantugrul/flowtide/src/api/editor"
 	"github.com/orhantugrul/flowtide/src/api/project"
+	"github.com/orhantugrul/flowtide/src/api/stats"
 	"github.com/orhantugrul/flowtide/src/database"
 )
 
@@ -28,12 +29,12 @@ func main() {
 	}))
 
 	if err := database.Connect(); err != nil {
-		log.Fatal("Failed to connect database: ", err)
+		log.Fatal("failed to connect to database: ", err)
 	}
 
 	defer func() {
 		if err := database.Close(); err != nil {
-			log.Error("Failed to close database: ", err)
+			log.Fatal("failed to close database connection: ", err)
 		}
 	}()
 
@@ -42,6 +43,7 @@ func main() {
 		activity.UseRoutes(router)
 		editor.UseRoutes(router)
 		project.UseRoutes(router)
+		stats.UseRoutes(router)
 	}
 
 	log.Fatal(app.Listen(":8080"))
